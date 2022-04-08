@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["game", "library", "engine", "framework", "simple", "web game", "canvas", "game engine", "game-engine", "game-framework", "game-library", "game framework", "game library"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ubachukwu-Ibeh/cluster"
+  },
   "author": "Ubachukwu Brian Ibeh",
   "license": "ISC"
 }
