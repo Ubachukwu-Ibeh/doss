@@ -1,5 +1,5 @@
 {
-  "name": "cluster",
+  "name": "doss",
   "version": "1.0.0",
   "description": "A simple framework for making javascript games with html canvas.",
   "main": "index.js",
@@ -9,7 +9,7 @@
   "keywords": ["game", "library", "engine", "framework", "simple", "web game", "canvas", "game engine", "game-engine", "game-framework", "game-library", "game framework", "game library"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ubachukwu-Ibeh/cluster"
+    "url": "https://github.com/Ubachukwu-Ibeh/doss"
   },
   "author": "Ubachukwu Brian Ibeh",
   "license": "ISC"

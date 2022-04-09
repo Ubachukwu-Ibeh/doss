@@ -38,4 +38,4 @@ const cluster = {
   game,
 };
 
-export default cluster;
+export default doss;
