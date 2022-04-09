@@ -18,7 +18,7 @@ import {
   game,
 } from "./globals/globals.js";
 
-const cluster = {
+const doss = {
   gameLoop,
   Box,
   deleteComponent,
