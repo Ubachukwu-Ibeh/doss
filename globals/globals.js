@@ -21,7 +21,6 @@ class Game {
       height: undefined,
     };
     this.scenes = {};
-    this.newDisplaySettings = {};
 
     for (const key in props) {
       this[key] = props[key];
