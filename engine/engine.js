@@ -7,7 +7,7 @@ import {
 } from "../globals/globals.js";
 
 export const engine = ({ newDisplaySettings, camera, pause } = game) => {
-  const validComponents = resolveComponents(newDisplaySettings);
+  const validComponents = resolveComponents();
   const validComponentsArray = Object.values(validComponents);
 
   const resolveControls = () => {
@@ -36,13 +36,28 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
   };
 
   const resolveCollisions = () => {
-    const collisionBoxes = validComponentsArray.filter((component) => {
+    let rigidCollisionBoxes = [];
+    let allCollisionBoxes = [];
+    let nonRigidCollisionBoxes = [];
+
+    //Getting all the collison boxes
+    validComponentsArray.forEach((component) => {
       if (pause && component.type !== "ui") return;
-      if (component.canCollide === true) {
-        return component;
+      if (component.canCollide === true && component.rigidBody) {
+        rigidCollisionBoxes.push(component);
+      }
+      if (
+        (component.canCollide === true && component.rigidBody) ||
+        (component.canCollide && !component.rigidBody)
+      ) {
+        allCollisionBoxes.push(component);
+      }
+      if (component.canCollide && !component.rigidBody) {
+        nonRigidCollisionBoxes.push(component);
       }
     });
 
+    //General collision test
     const testForCollision = (A, B) => {
       if (
         A.x < B.x + B.width &&
@@ -56,6 +71,32 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
       }
     };
 
+    //Overlap collisons
+    const resolveNonRigidBoxesCollisions = () => {
+      for (let i = 0; i < nonRigidCollisionBoxes.length; i++) {
+        for (let j = 0; j < allCollisionBoxes.length; j++) {
+          if (i === j) continue;
+
+          let A = nonRigidCollisionBoxes[i];
+          let B = allCollisionBoxes[j];
+
+          const isColliding = testForCollision(A, B);
+
+          if (isColliding) {
+            let collisionDataA, collisionDataB;
+
+            collisionDataA = { object: B };
+            collisionDataB = { object: A };
+
+            if (A.onCollision) A.onCollision(collisionDataA);
+            if (B.onCollision) B.onCollision(collisionDataB);
+          }
+        }
+      }
+    };
+    resolveNonRigidBoxesCollisions();
+
+    //Rigidbody collisions
     let i = 0,
       j,
       k,
@@ -65,13 +106,13 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
     const resolve = () => {
       let collisionDataA, collisionDataB;
 
-      for (i; i < collisionBoxes.length; i++) {
+      for (i; i < rigidCollisionBoxes.length; i++) {
         j = 0;
-        for (j; j < collisionBoxes.length; j++) {
+        for (j; j < rigidCollisionBoxes.length; j++) {
           if (i === j) continue;
 
-          const A = collisionBoxes[i];
-          const B = collisionBoxes[j];
+          const A = rigidCollisionBoxes[i];
+          const B = rigidCollisionBoxes[j];
 
           if (testForCollision(A, B)) {
             collided = true;
@@ -155,7 +196,7 @@ export const engine = ({ newDisplaySettings, camera, pause } = game) => {
                 }
               }
             }
-          } else if (collided && j === collisionBoxes.length - 1) {
+          } else if (collided && j === rigidCollisionBoxes.length - 1) {
             i = k;
             j = l;
             k = undefined;
