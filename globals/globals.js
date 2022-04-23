@@ -192,11 +192,6 @@ export const set = (val) => {
   }
 };
 
-//Camera shake
-export const cameraShake = (axis, arr) => {
-  game.cameraShake[`${axis}Values`] = arr;
-};
-
 //Zooming
 const resolveZoom = (obj, val, reset) => {
   let amount = val;
